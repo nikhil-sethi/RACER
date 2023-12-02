@@ -87,7 +87,7 @@ void pubCameraPose(const ros::TimerEvent& event) {
   // cout<<"pub cam pose"
   geometry_msgs::PoseStamped camera_pose;
   camera_pose.header = odom_.header;
-  camera_pose.header.frame_id = "/map";
+  camera_pose.header.frame_id = "world";
   camera_pose.pose.position.x = cam2world(0, 3);
   camera_pose.pose.position.y = cam2world(1, 3);
   camera_pose.pose.position.z = cam2world(2, 3);
@@ -125,14 +125,15 @@ void renderDepth() {
   Eigen::Vector3d pos = cam2world.block<3, 1>(0, 3);
   for (auto pt : cloudIn.points) {
     Eigen::Vector3d pw(pt.x, pt.y, pt.z);
-    if ((pos - pw).norm() > 5.0) continue;
+    if ((pos - pw).norm() > 5.0) continue; // discard points outside a radius
 
-    Eigen::Vector3d pc = Rcw * pw + tcw;
+    Eigen::Vector3d pc = Rcw * pw + tcw; // convert world point to camera frame 
 
-    if (pc[2] <= 0.0) continue;
+    if (pc[2] <= 0.0) continue; // remove ever
 
     // std::cout << "pc: " << pc.transpose() << std::endl;
 
+    // 3D camera frame to image 2D 
     float projected_x, projected_y;
     projected_x = pc[0] / pc[2] * fx + cx;
     projected_y = pc[1] / pc[2] * fy + cy;
@@ -201,8 +202,8 @@ int main(int argc, char** argv) {
   double sensing_duration = 1.0 / sensing_rate;
   double estimate_duration = 1.0 / estimation_rate;
 
-  local_sensing_timer = nh.createTimer(ros::Duration(sensing_duration), renderSensedPoints);
-  estimation_timer = nh.createTimer(ros::Duration(estimate_duration), pubCameraPose);
+  local_sensing_timer = nh.createTimer(ros::Duration(sensing_duration), renderSensedPoints); // publishes the depth image
+  estimation_timer = nh.createTimer(ros::Duration(estimate_duration), pubCameraPose); // publishes odometry
 
   ros::Rate rate(100);
   bool status = ros::ok();

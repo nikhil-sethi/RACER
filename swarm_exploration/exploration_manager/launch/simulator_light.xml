@@ -14,14 +14,14 @@
   <arg name="odometry_topic" />
 
   <!-- Physical simulator (so3 simulator, disturbance generator and controller) is replaced by light weight cmd2odom -->
-  <node pkg="poscmd_2_odom" name="poscmd_2_odom_$(arg drone_id)" type="poscmd_2_odom" output="screen">
+  <!-- <node pkg="poscmd_2_odom" name="poscmd_2_odom_$(arg drone_id)" type="poscmd_2_odom" output="screen">
       <param name="drone_id"     value="$(arg drone_id)"/>
       <param name="init_x" value="$(arg init_x)"/>
       <param name="init_y" value="$(arg init_y)"/>
       <param name="init_z" value="$(arg init_z)"/>
       <remap from="~command" to="/planning/pos_cmd_$(arg drone_id)"/>
       <remap from="~odometry" to="$(arg odometry_topic)"/>
-  </node>
+  </node> -->
                                                                                                                                                                                                                                                                                                     
   <node pkg="odom_visualization" name="odom_visualization_$(arg drone_id)" type="odom_visualization" output="screen">
       <remap from="~odom" to="$(arg odometry_topic)"/>
@@ -35,7 +35,7 @@
       <param name="robot_scale" value="1.0"/>
   </node>
 
-  <node pkg="local_sensing_node" type="pcl_render_node" name="pcl_render_node_$(arg drone_id)" output="screen">
+  <!-- <node pkg="local_sensing_node" type="pcl_render_node" name="pcl_render_node_$(arg drone_id)" output="screen">
       <rosparam command="load" file="$(find local_sensing_node)/params/camera.yaml" />
 
       <param name="sensing_horizon"  value="5.0" />
@@ -53,6 +53,6 @@
       <remap from="/pcl_render_node/depth" to="/pcl_render_node/depth_$(arg drone_id)"/>
       <remap from="/pcl_render_node/sensor_pose" to="/pcl_render_node/sensor_pose_$(arg drone_id)"/>
       <remap from="/pcl_render_node/odom" to="/pcl_render_node/odom_$(arg drone_id)"/>
-  </node>
+  </node> -->
 
 </launch>

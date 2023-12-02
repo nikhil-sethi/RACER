@@ -46,7 +46,7 @@
     <arg name="fy" value="$(arg fy)"/>
 
     <!-- maximum velocity and acceleration the drone will reach -->
-    <arg name="max_vel" value="1.5" />
+    <arg name="max_vel" value="0.5" />
     <arg name="max_acc" value="1.0" />
     <!-- <arg name="max_vel" value="1.0" />
     <arg name="max_acc" value="0.8" /> -->
@@ -65,7 +65,7 @@
     <remap from="planning/position_cmd_vis" to="planning/position_cmd_vis_$(arg drone_id)" />
     <remap from="planning/travel_traj" to="planning/travel_traj_$(arg drone_id)" />
 
-    <param name="traj_server/time_forward" value="1.5" type="double"/>
+    <param name="traj_server/time_forward" value="0.5" type="double"/>
     <param name="traj_server/pub_traj_id" value="4" type="int"/>
     <param name="traj_server/drone_id" value="$(arg drone_id)" type="int"/>
     <param name="traj_server/drone_num" value="$(arg drone_num)" type="int"/>
@@ -87,7 +87,7 @@
     <arg name="map_size_x" value="$(arg map_size_x)"/>
     <arg name="map_size_y" value="$(arg map_size_y)"/>
     <arg name="map_size_z" value="$(arg map_size_z)"/>
-    <arg name="odometry_topic" value="$(arg odom_prefix)_$(arg drone_id)" />
+    <arg name="odometry_topic" value="$(arg odometry_topic)" />
   </include>
 
   <!-- lcm communication -->
