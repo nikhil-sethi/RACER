@@ -142,10 +142,10 @@
     <param name="exploration/max_decay" value="0.8" type="double"/>
     <param name="exploration/top_view_num" value="15" type="int"/>
     <param name="exploration/vm" value="$(eval 1.0 * arg('max_vel'))" type="double"/>
-    <param name="exploration/am" value="$(eval 1.0 * arg('max_acc'))" type="double"/>
-    <param name="exploration/yd" value="$(eval 80 * 3.1415926 / 180.0)" type="double"/>
+    <param name="exploration/am" value="$(eval 0.5 * arg('max_acc'))" type="double"/>
+    <param name="exploration/yd" value="$(eval 20 * 3.1415926 / 180.0)" type="double"/>
     <!-- <param name="exploration/yd" value="$(eval 60 * 3.1415926 / 180.0)" type="double"/> -->
-    <param name="exploration/ydd" value="$(eval 90 * 3.1415926 / 180.0)" type="double"/>
+    <param name="exploration/ydd" value="$(eval 20 * 3.1415926 / 180.0)" type="double"/>
     <param name="exploration/w_dir" value="1.5" type="double"/>
     <param name="exploration/tsp_dir" value="$(find lkh_tsp_solver)/resource" type="string"/>
     <param name="exploration/mtsp_dir" value="$(find lkh_mtsp_solver)/resource" type="string"/>

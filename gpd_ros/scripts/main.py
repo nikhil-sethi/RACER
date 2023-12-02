@@ -141,9 +141,10 @@ class Env(CtrlAviary):
         self.br = tf.TransformBroadcaster()
         self.start = rospy.Time.now()
         self.cmd_subs = [rospy.Subscriber(f"planning/pos_cmd_{i+1}", PositionCommand, self.cmds_callback, callback_args=(i,)) for i in range(DEFAULT_NUM_DRONES)]
-        self.cmds = np.array([[0,0,0,0],[0,0,0,0]])
-        self.target_xyzs = initial_xyzs
-        self.target_rpys = initial_rpys
+        self.target_xyzs = initial_xyzs.astype(np.float32)
+        self.target_rpys = initial_rpys.astype(np.float32)
+        self.target_rpy_rates = np.zeros((DEFAULT_NUM_DRONES, 3))
+        self.target_vels = np.zeros((DEFAULT_NUM_DRONES, 3))
 
     def _addObstacles(self):
         """Remember to add separate urdfs for all the things you want to fake segmentation for"""
@@ -263,7 +264,10 @@ class Env(CtrlAviary):
         # self.cmds[j,3] = min(1,np.linalg.norm(v))
         # print(self.cmds[j])
         self.target_xyzs[j] = np.array([msg.position.x,msg.position.y,msg.position.z])
-        self.target_rpys[j] = np.array([0., 0., msg.yaw], dtype=np.float32)
+        # print(msg.yaw)
+        self.target_rpys[j] = np.array([0, 0, msg.yaw])
+        self.target_rpy_rates[j] = np.array([0, 0, msg.yaw_dot])
+        self.target_vels[j] = np.array([msg.velocity.x,msg.velocity.y,msg.velocity.z])
     
 def run(
         drone=DEFAULT_DRONES,
@@ -376,13 +380,15 @@ def run(
                                                     state=obs[j],
                                                     target_pos=env.target_xyzs[j],
                                                     # target_pos=INIT_XYZS[j, :] + TARGET_POS[wp_counters[j], :],
+                                                    target_vel = env.target_vels[j],
+                                                    target_rpy_rates = env.target_rpy_rates[j],
                                                     target_rpy=env.target_rpys[j]
                                                     )
             # action[j,:] = env.cmds[j]
             # env.pos[j] = env.target_xyzs[j]
             # print("dfgadfg")
             # print(env.target_rpys[j])
-
+            # print(action[j])
             # env.quat[j] = Rotation.from_euler('z',env.target_rpys[j,2]).as_quat()
             start = time.time()
             env.publish_images(j)
@@ -429,7 +435,7 @@ if __name__ == "__main__":
 
     pose_pubs = [rospy.Publisher(f"drone_{i}/pose", PoseStamped, queue_size=1) for i in range(DEFAULT_NUM_DRONES)]
     campose_pubs = [rospy.Publisher(f"drone_{i}/camera", PoseStamped, queue_size=1) for i in range(DEFAULT_NUM_DRONES)]
-    odom_pubs = [rospy.Publisher(f"drone_{i}/odom", Odometry, queue_size=1) for i in range(DEFAULT_NUM_DRONES)]
+    odom_pubs = [rospy.Publisher(f"drone_{i}/odom", Odometry, queue_size=10) for i in range(DEFAULT_NUM_DRONES)]
     cam_info_pub = rospy.Publisher(f"drone_0/camera_info", CameraInfo, queue_size=1)
     pcl_pub = rospy.Publisher(f"drone_0/semantic_pointcloud", PointCloud2, queue_size=10)
 
