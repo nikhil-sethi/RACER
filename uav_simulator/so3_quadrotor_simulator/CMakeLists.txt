@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
+set(CMAKE_CXX_STANDARD 14)
 project(so3_quadrotor_simulator)
 
 add_compile_options(-std=c++11)

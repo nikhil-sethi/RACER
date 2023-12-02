@@ -38,6 +38,7 @@
 #target_link_libraries(so3_disturbance_generator pose_utils)
 #----------------------------------
 cmake_minimum_required(VERSION 2.8.3)
+set(CMAKE_CXX_STANDARD 14)
 project(so3_disturbance_generator)
 
 ## Find catkin macros and libraries
