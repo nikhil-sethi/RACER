@@ -9,7 +9,9 @@
 #include <plan_env/multi_map_manager.h>
 #include <active_perception/perception_utils.h>
 #include <active_perception/graph_node.h>
-
+#include <pcl/segmentation/extract_clusters.h>
+#include <pcl/filters/extract_indices.h>
+#include <pcl/common/centroid.h>
 // use PCL region growing segmentation
 // #include <pcl/point_types.h>
 // #include <pcl/search/search.h>
@@ -415,6 +417,44 @@ void FrontierFinder::computeFrontierInfo(Frontier& ftr) {
   }
   ftr.average_ /= double(ftr.cells_.size());
 
+  // compute semantic average
+  double i = 0;
+  ftr.sem_average_.setZero();
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
+  *cloud = edt_env_->sdf_map_->getSemCloud(); 
+  if (cloud->points.size()>0){
+    
+    pcl::search::KdTree<pcl::PointXYZ>::Ptr tree (new pcl::search::KdTree<pcl::PointXYZ>);
+    tree->setInputCloud (cloud);
+    std::vector<pcl::PointIndices> cluster_indices;  
+    pcl::EuclideanClusterExtraction<pcl::PointXYZ> ec;
+    ec.setClusterTolerance (0.1); // 10cm
+    ec.setMinClusterSize (5);
+    ec.setMaxClusterSize (100);
+    ec.setSearchMethod (tree);
+    ec.setInputCloud (cloud);
+    ec.extract (cluster_indices);
+
+    for (pcl::PointIndices indices: cluster_indices) {
+        Eigen::Vector4d cluster_mean;
+        pcl::compute3DCentroid(*cloud, indices, cluster_mean);
+
+        // find cells close to the cluster mean
+        // get average of these cells
+
+        // int i=0;
+        for (Vector3d cell : ftr.cells_) {
+            double dist = pow((pow(cluster_mean[0] - cell[0], 2) + pow(cluster_mean[1] - cell[1], 2) + pow(cluster_mean[2] - cell[2],2)), 0.5);
+
+            if (dist < 2){
+              ftr.sem_average_ += cell;
+              i+=1;
+            }
+        }
+        if (i!=0) ftr.sem_average_ /= i;
+    }
+  }
+  
   // Compute downsampled cluster
   downsample(ftr.cells_, ftr.filtered_cells_);
 }
@@ -872,7 +912,14 @@ void FrontierFinder::sampleViewpoints(Frontier& frontier) {
   for (double rc = candidate_rmin_, dr = (candidate_rmax_ - candidate_rmin_) / candidate_rnum_;
        rc <= candidate_rmax_ + 1e-3; rc += dr)
     for (double phi = -M_PI; phi < M_PI; phi += candidate_dphi_) {
-      const Vector3d sample_pos = frontier.average_ + rc * Vector3d(cos(phi), sin(phi), 0);
+      Vector3d sample_pos =  rc * Vector3d(cos(phi), sin(phi), 0);
+      if (frontier.sem_average_.sum() !=0){
+        // std::cout<<frontier.sem_average_<<std::endl;
+        sample_pos = sample_pos + frontier.sem_average_;
+      }
+      else{
+        sample_pos = sample_pos + frontier.average_;
+      }
 
       // Qualified viewpoint is in bounding box and in safe region
       if (!edt_env_->sdf_map_->isInBox(sample_pos) ||

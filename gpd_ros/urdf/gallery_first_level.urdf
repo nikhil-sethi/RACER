@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<robot name="urdf_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:arg name="mesh_prefix" default="$(find gpd_ros)"/>
+    <!-- <xacro:arg name="in" default="false"/> -->
+    <xacro:include filename="$(find gpd_ros)/urdf/gallery_first_level_floor.xacro"/>
+    <xacro:include filename="$(find gpd_ros)/urdf/gallery_first_level_wall.xacro"/>
+    <joint name="j1" type="fixed">
+        <parent link="floor"/>
+        <child link="wall"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+</robot>

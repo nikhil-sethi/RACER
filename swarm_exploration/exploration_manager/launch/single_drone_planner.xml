@@ -9,6 +9,7 @@
   <arg name="sensor_pose_topic"/>
   <arg name="depth_topic"/>
   <arg name="cloud_topic"/>
+  <arg name="sem_cloud_topic"/>
 
   <arg name="cx"/>
   <arg name="cy"/>
@@ -25,6 +26,7 @@
     <remap from ="/map_ros/pose"   to = "$(arg sensor_pose_topic)"/> 
     <remap from ="/map_ros/depth" to = "$(arg depth_topic)"/>
     <remap from ="/map_ros/cloud" to="$(arg cloud_topic)"/>
+    <remap from ="/map_ros/sem_cloud" to="$(arg sem_cloud_topic)"/>
 
     <remap from="/planning/replan" to="/planning/replan_$(arg drone_id)" />
     <remap from="/planning/new" to="/planning/new_$(arg drone_id)" />
@@ -86,10 +88,10 @@
     <param name="sdf_map/box_max_y" value="7" type="double"/>
     <param name="sdf_map/box_max_z" value="2.0" type="double"/> -->
     <param name="sdf_map/box_min_x" value="-5" type="double"/>
-    <param name="sdf_map/box_min_y" value="-7.5" type="double"/>
+    <param name="sdf_map/box_min_y" value="-5" type="double"/>
     <param name="sdf_map/box_min_z" value="0" type="double"/> 
     <param name="sdf_map/box_max_x" value="5" type="double"/>
-    <param name="sdf_map/box_max_y" value="7.5" type="double"/>
+    <param name="sdf_map/box_max_y" value="5" type="double"/>
     <param name="sdf_map/box_max_z" value="2" type="double"/>
     <param name="sdf_map/no_drone_1" value="false" type="bool"/>
 
@@ -143,9 +145,9 @@
     <param name="exploration/top_view_num" value="15" type="int"/>
     <param name="exploration/vm" value="$(eval 1.0 * arg('max_vel'))" type="double"/>
     <param name="exploration/am" value="$(eval 0.5 * arg('max_acc'))" type="double"/>
-    <param name="exploration/yd" value="$(eval 20 * 3.1415926 / 180.0)" type="double"/>
+    <param name="exploration/yd" value="$(eval 45 * 3.1415926 / 180.0)" type="double"/>
     <!-- <param name="exploration/yd" value="$(eval 60 * 3.1415926 / 180.0)" type="double"/> -->
-    <param name="exploration/ydd" value="$(eval 20 * 3.1415926 / 180.0)" type="double"/>
+    <param name="exploration/ydd" value="$(eval 45 * 3.1415926 / 180.0)" type="double"/>
     <param name="exploration/w_dir" value="1.5" type="double"/>
     <param name="exploration/tsp_dir" value="$(find lkh_tsp_solver)/resource" type="string"/>
     <param name="exploration/mtsp_dir" value="$(find lkh_mtsp_solver)/resource" type="string"/>

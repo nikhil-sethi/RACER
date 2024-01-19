@@ -1,0 +1,20 @@
+<launch>
+    <!-- <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager" />
+  
+    <node pkg="nodelet" type="nodelet" name="nodelet1"
+          args="load depth_image_proc/point_cloud_xyzrgb nodelet_manager" output="screen">
+      <remap from="rgb/image_rect_color" to="drone_0/img_seg"/>
+      <remap from="rgb/camera_info" to="drone_0/camera_info"/>
+      <remap from="depth_registered/image_rect" to="drone_0/img_dep"/>
+      <remap from="depth_registered/points" to="points"/>
+      <param name="queue_size" type="int" value="20"/>
+      
+    </node> -->
+    <include file="$(find hydra_ros)/launch/utils/includes/rgbd_to_pointcloud.xml" pass_all_args="true">
+      <arg name="rgb_info_topic" value="drone_0/camera_info"/>
+      <arg name="rgb_topic" value="drone_0/img_seg"/>
+      <arg name="pointcloud_topic" value="points"/>
+      <arg name="depth_topic" value="drone_0/img_dep"/>    
+    </include>
+
+  </launch>

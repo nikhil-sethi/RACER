@@ -22,7 +22,25 @@
       <remap from="~command" to="/planning/pos_cmd_$(arg drone_id)"/>
       <remap from="~odometry" to="$(arg odometry_topic)"/>
   </node> -->
-                                                                                                                                                                                                                                                                                                    
+  <node pkg="gpd_ros" name="simulator" type="sim_node.py" output="screen"/>
+  <!-- <node pkg="nodelet"
+  type="nodelet"
+  name="nodelet_manager"
+  args="manager"
+  output="screen"/>
+  <node pkg="nodelet"
+        type="nodelet"
+        name="cloudify"
+        args="load depth_image_proc/point_cloud_xyzrgb nodelet_manager -no-bond"
+        output="screen">
+    <param name="queue_size" value="50"/>
+
+    <remap from="rgb/camera_info" to="drone/camera_info"/>
+    <remap from="rgb/image_rect_color" to="drone_0/img_seg"/>
+    <remap from="depth_registered/image_rect" to="drone_0/img_dep"/>
+    <remap from="depth_registered/points" to="drone_0/sem_cloud"/>
+    </node> -->
+
   <node pkg="odom_visualization" name="odom_visualization_$(arg drone_id)" type="odom_visualization" output="screen">
       <remap from="~odom" to="$(arg odometry_topic)"/>
       <param name="drone_id" value="$(arg drone_id)"/>    
@@ -50,8 +68,8 @@
 
       <remap from="~global_map" to="/map_generator/global_cloud"/>
       <remap from="~odometry"   to="$(arg odometry_topic)"/>
-      <remap from="/pcl_render_node/depth" to="/pcl_render_node/depth_$(arg drone_id)"/>
-      <remap from="/pcl_render_node/sensor_pose" to="/pcl_render_node/sensor_pose_$(arg drone_id)"/>
+      <remap from="/pcl_render_node/depth" to="drone_0/img_dep"/>
+      <remap from="/pcl_render_node/sensor_pose" to="drone_0/camera"/>
       <remap from="/pcl_render_node/odom" to="/pcl_render_node/odom_$(arg drone_id)"/>
   </node> -->
 

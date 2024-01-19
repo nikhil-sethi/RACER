@@ -75,6 +75,10 @@ void MapROS::init() {
       new message_filters::Subscriber<sensor_msgs::Image>(node_, "/map_ros/depth", 50));
   cloud_sub_.reset(
       new message_filters::Subscriber<sensor_msgs::PointCloud2>(node_, "/map_ros/cloud", 50));
+  
+  sem_cloud_sub_.reset(
+      new message_filters::Subscriber<sensor_msgs::PointCloud2>(node_, "/map_ros/sem_cloud", 50));
+
   pose_sub_.reset(
       new message_filters::Subscriber<geometry_msgs::PoseStamped>(node_, "/map_ros/pose", 25));
 
@@ -84,6 +88,10 @@ void MapROS::init() {
   sync_cloud_pose_.reset(new message_filters::Synchronizer<MapROS::SyncPolicyCloudPose>(
       MapROS::SyncPolicyCloudPose(100), *cloud_sub_, *pose_sub_));
   sync_cloud_pose_->registerCallback(boost::bind(&MapROS::cloudPoseCallback, this, _1, _2));
+  
+  // for the semantic cloud 
+  sync_sem_cloud_pose_.reset(new message_filters::Synchronizer<MapROS::SyncPolicyCloudPose>(MapROS::SyncPolicyCloudPose(100), *sem_cloud_sub_, *pose_sub_));
+  sync_sem_cloud_pose_->registerCallback(boost::bind(&MapROS::semCloudPoseCallback, this, _1, _2));
 
   map_start_time_ = ros::Time::now();
 }
@@ -130,6 +138,7 @@ void MapROS::updateESDFCallback(const ros::TimerEvent& /*event*/) {
 
 void MapROS::depthPoseCallback(
     const sensor_msgs::ImageConstPtr& img, const geometry_msgs::PoseStampedConstPtr& pose) {
+  std::cout<<"indepthcallback"<<std::endl;
   camera_pos_(0) = pose->pose.position.x;
   camera_pos_(1) = pose->pose.position.y;
   camera_pos_(2) = pose->pose.position.z;
@@ -184,7 +193,19 @@ void MapROS::cloudPoseCallback(
   pcl::PointCloud<pcl::PointXYZ> cloud;
   pcl::fromROSMsg(*msg, cloud);
   int num = cloud.points.size();
-
+  Eigen::Matrix3d camera_r = camera_q_.toRotationMatrix();
+  Eigen::Vector3d pt_cur, pt_world;
+  
+  for (auto& pt: cloud.points){
+    pt_cur(0) =pt.x;
+    pt_cur(1) =pt.y;
+    pt_cur(2) =pt.z;
+    pt_world = camera_r * pt_cur + camera_pos_;
+    pt.x = pt_world[0];
+    pt.y = pt_world[1];
+    pt.z = pt_world[2];
+    
+  }
   map_->inputPointCloud(cloud, num, camera_pos_);
 
   if (local_updated_) {
@@ -193,6 +214,34 @@ void MapROS::cloudPoseCallback(
     local_updated_ = false;
   }
 }
+
+void MapROS::semCloudPoseCallback(
+    const sensor_msgs::PointCloud2ConstPtr& msg, const geometry_msgs::PoseStampedConstPtr& pose) {
+  camera_pos_(0) = pose->pose.position.x;
+  camera_pos_(1) = pose->pose.position.y;
+  camera_pos_(2) = pose->pose.position.z;
+  camera_q_ = Eigen::Quaterniond(pose->pose.orientation.w, pose->pose.orientation.x,
+      pose->pose.orientation.y, pose->pose.orientation.z);
+  pcl::PointCloud<pcl::PointXYZ> sem_cloud;
+  pcl::fromROSMsg(*msg, sem_cloud);
+  int num = sem_cloud.points.size();
+  Eigen::Matrix3d camera_r = camera_q_.toRotationMatrix();
+  Eigen::Vector3d pt_cur, pt_world;
+  
+  for (auto& pt: sem_cloud.points){
+    pt_cur(0) =pt.x;
+    pt_cur(1) =pt.y;
+    pt_cur(2) =pt.z;
+    pt_world = camera_r * pt_cur + camera_pos_;
+    pt.x = pt_world[0];
+    pt.y = pt_world[1];
+    pt.z = pt_world[2];
+  }
+  map_->setSemCloud(sem_cloud);
+
+}
+
+
 
 // void MapROS::basecoorCallback(const swarm_msgs::swarm_drone_basecoorConstPtr& msg) {
 

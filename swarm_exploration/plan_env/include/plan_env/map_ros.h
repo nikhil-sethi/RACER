@@ -36,6 +36,8 @@ private:
       const sensor_msgs::ImageConstPtr& img, const geometry_msgs::PoseStampedConstPtr& pose);
   void cloudPoseCallback(
       const sensor_msgs::PointCloud2ConstPtr& msg, const geometry_msgs::PoseStampedConstPtr& pose);
+  void semCloudPoseCallback(
+      const sensor_msgs::PointCloud2ConstPtr& msg, const geometry_msgs::PoseStampedConstPtr& pose);
   void updateESDFCallback(const ros::TimerEvent& /*event*/);
   void visCallback(const ros::TimerEvent& /*event*/);
 //   void basecoorCallback(const swarm_msgs::swarm_drone_basecoorConstPtr& msg);
@@ -63,10 +65,13 @@ private:
   ros::NodeHandle node_;
   shared_ptr<message_filters::Subscriber<sensor_msgs::Image>> depth_sub_;
   shared_ptr<message_filters::Subscriber<sensor_msgs::PointCloud2>> cloud_sub_;
+  shared_ptr<message_filters::Subscriber<sensor_msgs::PointCloud2>> sem_cloud_sub_;
   shared_ptr<message_filters::Subscriber<geometry_msgs::PoseStamped>> pose_sub_;
   SynchronizerImagePose sync_image_pose_;
   SynchronizerCloudPose sync_cloud_pose_;
+  SynchronizerCloudPose sync_sem_cloud_pose_;
 
+  
   ros::Publisher map_local_pub_, map_local_inflate_pub_, esdf_pub_, map_all_pub_, unknown_pub_,
       update_range_pub_, depth_pub_;
   ros::Timer esdf_timer_, vis_timer_;

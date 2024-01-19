@@ -1,0 +1,113 @@
+<robot name="simple_box2">
+  <link name="wall1">
+    <inertial>
+      <origin xyz="2.5 0 0" /> 
+      <mass value="0.0" />
+      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0"  xyz="2.5 0 1.5"/>
+      <geometry>
+        <box size="0.1 5 3" />
+      </geometry>
+      <material name="red">
+        <color rgba="1 0 0 1"/>
+        <specular rgb="11 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin  rpy="0 0 0" xyz="2.5 0 1.5"/>
+      <geometry>
+        <box size="0.1 5 3" />
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="wall2">
+    <inertial>
+      <origin xyz="2.5 0 0" /> 
+      <mass value="0.0" />
+      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+      <origin  rpy="0 0 1.57" xyz="0 2.5 1.5"/>
+      <geometry>
+        <box size="0.1 5 3" />
+      </geometry>
+      <material name="red">
+        <color rgba="1 0 0 1"/>
+        <specular rgb="11 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin  rpy="0 0 1.57" xyz="0 2.5 1.5"/>
+      <geometry>
+        <box size="0.1 5 3" />
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="wall3">
+    <inertial>
+      <origin xyz="2.5 0 0" /> 
+      <mass value="0.0" />
+      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+      <origin  rpy="0 0 0" xyz="-2.5 0 1.5"/>
+      <geometry>
+        <box size="0.1 5 3" />
+      </geometry>
+      <material name="red">
+        <color rgba="1 0 0 1"/>
+        <specular rgb="11 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin  rpy="0 0 0" xyz="-2.5 0 1.5"/>
+      <geometry>
+        <box size="0.1 5 3" />
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="wall5">
+    <inertial>
+      <origin xyz="2.5 0 0" /> 
+      <mass value="0.0" />
+      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
+    </inertial>
+    <visual>
+      <origin  rpy="0 0 1.57" xyz="0 -2.5.5 1.5"/>
+      <geometry>
+        <box size="0.1 5 3" />
+      </geometry>
+      <material name="red">
+        <color rgba="1 0 0 1"/>
+        <specular rgb="11 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin  rpy="0 0 1.57" xyz="0 -2.5.5 1.5"/>
+      <geometry>
+        <box size="0.1 5 3" />
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="j2" type="fixed">
+        <parent link="wall1"/>
+        <child link="wall2"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+  <joint name="j1" type="fixed">
+        <parent link="wall1"/>
+        <child link="wall3"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+  <joint name="j3" type="fixed">
+      <parent link="wall1"/>
+      <child link="wall5"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+</robot>

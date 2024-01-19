@@ -1,8 +1,8 @@
 <launch>
   <!-- size of map, change the size in x, y, z according to your application -->
   <arg name="map_size_x" value="10"/>
-  <arg name="map_size_y" value="15"/>
-  <arg name="map_size_z" value=" 2"/>
+  <arg name="map_size_y" value="14"/>
+  <arg name="map_size_z" value=" 1.5"/>
 
   <!-- Global odom prefix -->
   <arg name="odom_prefix" value="/state_ukf/odom" />
@@ -24,7 +24,9 @@
     <arg name="map_size_z" value="$(arg map_size_z)"/>
     <arg name="odom_prefix" value="$(arg odom_prefix)"/>
     <arg name="odometry_topic" default="drone_0/odom"/>
-    <arg name="depth_topic" default="drone_0/img_dep"/>
+    <arg name="depth_topic" default="iris_depth_camera/camera/depth/image_raw"/>
+    <arg name="cloud_topic" default="drone_0/sem_clooud"/>
+    <arg name="sem_cloud_topic" default="drone_0/sem_cloud"/>
     <arg name="sensor_pose_topic" default="drone_0/camera"/>
     <arg name="drone_num" value="$(arg drone_num)"/>
     <arg name="simulation" default="true"/>

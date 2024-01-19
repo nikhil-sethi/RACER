@@ -59,7 +59,7 @@ DEFAULT_USER_DEBUG_GUI = False
 DEFAULT_OBSTACLES = True
 DEFAULT_SIMULATION_FREQ_HZ = 240
 DEFAULT_CONTROL_FREQ_HZ = 48
-DEFAULT_DURATION_SEC = 120
+DEFAULT_DURATION_SEC = 520
 DEFAULT_OUTPUT_FOLDER = 'results'
 DEFAULT_COLAB = False
 
@@ -159,6 +159,7 @@ class Env(CtrlAviary):
         
         rgb, dep, seg = self._getDroneImages(j, segmentation=False)
         far = 1000
+        print(np.max(dep))
         near = self.L+0.1
         dep = far * near / (far - (far - near) * dep)
         dep[dep>5] =0
@@ -172,7 +173,7 @@ class Env(CtrlAviary):
         4: floor
         5: ceiling
         """
-
+        
         # Create a colormap with enough colors for all unique indices. 
         cmap = plt.get_cmap('tab10', 5+DEFAULT_NUM_DRONES) # the number here will have to be set manualrly to fake unique colors for the segmentation data
         
@@ -200,8 +201,9 @@ class Env(CtrlAviary):
         cam_info_pub.publish(cam_info_msg)
 
         # print(cv2.cvtColor(seg, cv2.COLOR_BGRA2RGB))
-        pcl = create_point_cloud(dep, seg[...,:-1], self.K)
-        pcl_pub.publish(pcl)
+        # pcl = create_point_cloud(dep, seg[...,:-1], self.K)
+        time.sleep(0.01)
+        # pcl_pub.publish(pcl)
 
     def publish_states(self, j):
         # Pose 
@@ -427,6 +429,9 @@ def run(
     if plot:
         logger.plot()
 
+
+
+
 if __name__ == "__main__":
     rospy.init_node("gpd_main", disable_signals=True)
     seg_pubs = [rospy.Publisher(f"drone_{i}/img_seg", Image, queue_size=1) for i in range(DEFAULT_NUM_DRONES)]
@@ -439,8 +444,7 @@ if __name__ == "__main__":
     cam_info_pub = rospy.Publisher(f"drone_0/camera_info", CameraInfo, queue_size=1)
     pcl_pub = rospy.Publisher(f"drone_0/semantic_pointcloud", PointCloud2, queue_size=10)
 
-    
-    
+
     bridge = CvBridge()
 
     #### Define and parse (optional) arguments for the script ##

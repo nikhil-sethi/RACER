@@ -1,0 +1,52 @@
+<?xml version="1.0" ?>
+<robot name="wolrd">
+    <link name="pillars" concave="yes">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0"/>
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+          </inertial>
+        <visual>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="./pillars.obj" scale="1 1 1" />
+         </geometry>
+         <material name="grey">
+            <color rgba=".5 .5 .5 1"/>
+          </material> 
+        </visual> 
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <geometry>
+              <mesh filename="/root/racer_ws/src/RACER/gpd_ros/urdf/default/h0m7ov97t41b.obj" scale="1 1 1" />
+            </geometry>
+          </collision>  
+    </link>
+    <link name="floor" concave="yes">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0"/>
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+          </inertial>
+        <visual>
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="./floor.obj" scale="1 1 1" />
+         </geometry>
+         <material name="grey">
+            <color rgba=".5 .5 .5 1"/>
+          </material> 
+        </visual> 
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <geometry>
+              <mesh filename="./floor.obj" scale="1 1 1" />
+            </geometry>
+          </collision>  
+    </link>
+    <joint name="floor_pillar" type="fixed">
+        <parent link="floor"/>
+        <child link="pillars"/>
+        
+    </joint>
+</robot>

@@ -1,0 +1,8 @@
+digraph G {
+"map" -> "floor"[label=" Broadcaster: /static_transform_publisher_1700482161199722172\nAverage rate: 95.467\nBuffer length: 4.996\nMost recent transform: 1700482227.334\nOldest transform: 1700482222.337\n"];
+"floor" -> "wall"[label=" Broadcaster: /robot_state_publisher\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1700482227.3351274"[ shape=plaintext ] ;
+}->"map";
+}

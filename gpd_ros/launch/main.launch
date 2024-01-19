@@ -1,0 +1,36 @@
+<launch>
+    <param name="robot_description" command="xacro --inorder '$(find gpd_ros)/urdf/gallery_first_level.urdf' mesh_prefix:='file://$(find gpd_ros)'"/>
+    <node name="static_tf" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 1 world floor 10"/>
+    <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/> -->
+    <!-- <arg name="use_gt_frame" default="true"/> -->
+    <!-- <include file="$(find hydra_ros)/launch/hydra.launch" pass_all_args="true">
+        <arg name="sensor_frame" default="drone_0/odom"/>
+        <arg name="pointcloud_topic" default="drone_0/semantic_pointcloud"/>
+        <arg name="world_frame" default="world"/>
+        <arg name="semantic_map_dir" default="$(find gpd_ros)/cfg"/>
+        <arg name="semantic_map_file" default="gallery.csv"/>
+        <arg name="robot_id" default=":0"/>
+        <arg name="config_dir" default="$(find hydra)/config/uhumans2"/>
+        <arg name="dsg_output_prefix" default="gpd"/>
+        <arg name="reconstruction_config" default="$(find hydra)/config/uhumans2/reconstruction_config.yaml"/>
+        <arg name="extrinsics" default="$(find gpd_ros)/cfg/gpd.yaml"/>
+        <arg name="rviz_dir" default="$(find gpd_ros)/rviz"/>
+        <arg name="rviz_file" default="gallery.rviz"/>
+        <arg name="rviz_file_td" default="uhumans2_topdown.rviz"/>
+        <arg name="use_oriented_bounding_boxes" default="false"/>
+        <arg name="typology_dir" default="$(find gpd_ros)/cfg"/>
+        <arg name="typology_config" default="gallery_typology.yaml"/>
+    </include> -->
+
+    <node pkg="gpd_ros" name="main" type="main.py" output="screen"/>
+    <include file="$(find hydra_ros)/launch/utils/includes/rgbd_to_pointcloud.xml" pass_all_args="true">
+      <arg name="rgb_info_topic" value="drone_0/camera_info"/>
+      <arg name="rgb_topic" value="drone_0/img_seg"/>
+      <arg name="pointcloud_topic" value="semantic_pointcloud"/>
+      <arg name="depth_topic" value="drone_0/img_dep"/>    
+    </include>
+
+    <!-- <node type="rviz" name="rviz" pkg="rviz" args="-d $(find gpd_ros)/rviz/config.rviz" required="true"/> -->
+
+
+</launch>

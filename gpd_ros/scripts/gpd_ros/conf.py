@@ -1,0 +1,22 @@
+from gym_pybullet_drones.utils.enums import DroneModel, Physics
+import numpy as np
+
+DEFAULT_DRONES = DroneModel("cf2x")
+DEFAULT_NUM_DRONES = 1
+DEFAULT_PHYSICS = Physics("pyb")
+DEFAULT_GUI = False
+DEFAULT_RECORD_VISION = False
+DEFAULT_PLOT = False
+DEFAULT_USER_DEBUG_GUI = False
+DEFAULT_OBSTACLES = True
+DEFAULT_SIMULATION_FREQ_HZ = 240
+DEFAULT_CONTROL_FREQ_HZ = 48
+DEFAULT_DURATION_SEC = 520
+DEFAULT_OUTPUT_FOLDER = 'results'
+DEFAULT_COLAB = False
+
+INIT_XYZS = np.array([[1,0,0.5]])
+INIT_RPYS = np.zeros((DEFAULT_NUM_DRONES,3))
+INIT_RPYS[0,2]=3.5
+
+IMG_RES = (320, 240) 

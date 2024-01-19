@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot name="urdf_robot1" xmlns:xacro="http://www.ros.org/wiki/xacro">
+   <xacro:arg name="mesh_prefix" default="$(find gpd_ros)"/>
+  <link name="floor">
+    <contact>
+      <rolling_friction value="0.03" />
+      <spinning_friction value="0.03" />
+    </contact>
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0" />
+      <mass value="0.0" />
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1" />
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.625" />
+      <geometry>
+          <mesh filename="$(arg mesh_prefix)/urdf/meshes/ff_floor.obj" scale="0.5 0.5 0.5" />
+      </geometry>
+      <material name="white">
+        <color rgba="1 1 1 1" />
+        <specular rgb="11 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.625" />
+      <geometry>
+        <mesh filename="$(arg mesh_prefix)/urdf/meshes/ff_floor.obj" scale="0.5 0.5 0.5" />
+      </geometry>
+    </collision>
+  </link>
+</robot>

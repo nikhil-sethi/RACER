@@ -13,11 +13,16 @@
     <!-- <arg name="odometry_topic" default="/pcl_render_node/odom_$(arg drone_id)"/> -->
     <arg name="sensor_pose_topic" default="/pcl_render_node/sensor_pose_$(arg drone_id)"/> 
     <arg name="depth_topic" default="/pcl_render_node/depth_$(arg drone_id)"/> 
+    <arg name="cloud_topic" default="/pcl_render_node/depth_$(arg drone_id)"/> 
+    <arg name="sem_cloud_topic" default="/pcl_render_node/depth_$(arg drone_id)"/> 
     <arg name="cx" default="324.0879821777344"/>
     <arg name="cy" default="239.10362243652344"/>
     <arg name="fx" default="385.69793701171875"/>
     <arg name="fy" default="385.69793701171875"/>
-
+    <!-- <arg name="cx" default="160"/>
+    <arg name="cy" default="120"/>
+    <arg name="fx" default="277.12812928"/>
+    <arg name="fy" default="207.84609696"/> -->
 
   <!-- main algorithm params -->
   <include file="$(find exploration_manager)/launch/single_drone_planner.xml">
@@ -37,7 +42,8 @@
     <!-- subscribe ONLY TO ONE of the two topics -->
     <arg name="depth_topic" value="$(arg depth_topic)"/> 
 
-    <arg name="cloud_topic" value="/pcl_render_node/cloud_$(arg drone_id)"/>
+    <arg name="cloud_topic" value="$(arg cloud_topic)"/>
+    <arg name="sem_cloud_topic" value="$(arg sem_cloud_topic)"/>
 
     <!-- intrinsic params of the depth camera -->
     <arg name="cx" value="$(arg cx)"/>
@@ -78,7 +84,7 @@
   </node>
 
   <!-- use simulator -->
-  <include file="$(find exploration_manager)/launch/simulator_light.xml" if="$(arg simulation)">
+  <!-- <include file="$(find exploration_manager)/launch/simulator_light.xml" if="$(arg simulation)">
     <arg name="drone_id" value="$(arg drone_id)"/>
     <arg name="drone_num" value="$(arg drone_num)"/>
     <arg name="init_x"   value="$(arg init_x)"/>
@@ -88,7 +94,7 @@
     <arg name="map_size_y" value="$(arg map_size_y)"/>
     <arg name="map_size_z" value="$(arg map_size_z)"/>
     <arg name="odometry_topic" value="$(arg odometry_topic)" />
-  </include>
+  </include> -->
 
   <!-- lcm communication -->
   <!-- <include file="$(find inf_uwb_ros)/launch/uwb_node_sim.launch" if="$(arg simulation)">

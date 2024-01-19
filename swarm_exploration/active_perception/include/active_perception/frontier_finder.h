@@ -48,6 +48,9 @@ struct Frontier {
   // Path and cost from this cluster to other clusters
   list<vector<Vector3d>> paths_;
   list<double> costs_;
+
+  // Average position of semantically important voxels
+  Vector3d sem_average_;
 };
 
 class FrontierFinder {

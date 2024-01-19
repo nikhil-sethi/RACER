@@ -1,0 +1,14 @@
+---
+dynamic_semantic_labels: [4]
+objects:
+  labels: [1]
+structure_labels: [0, 2, 3, 4]
+stuff_labels: [2, 3, 4, 5]
+walls_labels: [2]
+floor_labels: [3]
+label_names:
+  - {label: 0, name: background}
+  - {label: 1, name: drone_0}
+  - {label: 2, name: wall}
+  - {label: 3, name: floor}
+  - {label: 4, name: ceiling}

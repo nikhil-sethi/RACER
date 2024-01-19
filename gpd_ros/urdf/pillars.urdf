@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<robot name="pillars">
+    <link name="pillars" concave="yes">
+        <inertial>
+            <origin rpy="0 0 1.57" xyz="0 0 0"/>
+            <mass value="0"/>
+            <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+          </inertial>
+        <visual>
+        <origin rpy="0 0 1.57" xyz="0 0 0"/>
+         <geometry>
+            <mesh filename="./meshes/pillars.obj" scale="0.5 0.5 0.5" />
+         </geometry>
+         <material name="yellow">
+            <color rgba="1 1 0 1"/>
+          </material> 
+        </visual> 
+        <collision>
+            <origin rpy="0 0 1.57" xyz="0 0 1" />
+            <geometry>
+              <!-- <mesh filename="./meshes/pillars.obj" scale="0.5 0.5 0.5" /> -->
+              <box size="0.0 0.0 0.0"/>
+            </geometry>
+          </collision>  
+    </link>
+</robot>

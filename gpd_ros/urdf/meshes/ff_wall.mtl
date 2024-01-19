@@ -1,0 +1,13 @@
+# Blender 4.0.1 MTL File: 'untitled.blend'
+# www.blender.org
+
+newmtl brick_wall_02
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd ../textures/brick_wall_02_diff_8k.jpg
+map_Ns ../textures/brick_wall_02_rough_8k.exr
+map_Bump -bm 1.000000 ../textures/brick_wall_02_nor_gl_8k.exr

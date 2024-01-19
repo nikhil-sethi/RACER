@@ -64,12 +64,15 @@ public:
   double getResolution();
   int getVoxelNum();
   bool getBaseCoor(const int& id, Eigen::Vector4d& transform);
+  void setSemCloud(const pcl::PointCloud<pcl::PointXYZ>& points){sem_cloud_ = points;}
+  pcl::PointCloud<pcl::PointXYZ> getSemCloud(){return sem_cloud_;}
 
   // Swarm
   shared_ptr<MultiMapManager> mm_;
   friend MultiMapManager;
 
 private:
+  pcl::PointCloud<pcl::PointXYZ> sem_cloud_;
   void clearAndInflateLocalMap();
   void inflatePoint(const Eigen::Vector3i& pt, int step, vector<Eigen::Vector3i>& pts);
   void setCacheOccupancy(const int& adr, const int& occ);
