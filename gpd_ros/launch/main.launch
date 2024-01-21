@@ -22,15 +22,28 @@
         <arg name="typology_config" default="gallery_typology.yaml"/>
     </include> -->
 
-    <node pkg="gpd_ros" name="main" type="main.py" output="screen"/>
-    <include file="$(find hydra_ros)/launch/utils/includes/rgbd_to_pointcloud.xml" pass_all_args="true">
-      <arg name="rgb_info_topic" value="drone_0/camera_info"/>
-      <arg name="rgb_topic" value="drone_0/img_seg"/>
-      <arg name="pointcloud_topic" value="semantic_pointcloud"/>
-      <arg name="depth_topic" value="drone_0/img_dep"/>    
-    </include>
+  <node pkg="gpd_ros" name="main" type="main.py" output="screen"/>
+  
+  <node pkg="nodelet"
+        type="nodelet"
+        name="nodelet_manager"
+        args="manager"
+        output="screen"/>
 
+  <!-- TODO(nathan) add optional rgb to depth registration -->
+
+  <node pkg="nodelet"
+        type="nodelet"
+        name="cloudify"
+        args="load depth_image_proc/point_cloud_xyzrgb nodelet_manager -no-bond"
+        output="screen">
+    <param name="queue_size" value="20"/>
+
+    <remap from="rgb/camera_info" to="drone_0/camera_info"/>
+    <remap from="rgb/image_rect_color" to="drone_0/img_seg"/>
+    <remap from="depth_registered/image_rect" to="drone_0/img_dep"/>
+    <remap from="depth_registered/points" to="semantic_pointcloud"/>
+  </node>
     <!-- <node type="rviz" name="rviz" pkg="rviz" args="-d $(find gpd_ros)/rviz/config.rviz" required="true"/> -->
-
 
 </launch>
